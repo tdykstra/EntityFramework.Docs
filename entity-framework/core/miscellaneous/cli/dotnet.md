@@ -16,15 +16,27 @@ If you're using Visual Studio, we recommend [the PMC Tools](powershell.md)) inst
 
 ## Installing the tools
 
- The .NET Core SDK version 2.1.300 and later includes EF Core CLI tools that are compatible with EF Core 2.0 and later versions. Therefore if you are using the current version of the .NET Core SDK and EF Core 2.0, no tools installation is required. In that case you can skip this section.
+How you install the tools differs depending on whether you're using EF Core 2.x or 1.x.
 
-Follow the instructions in this section if you have the .NET Core SDK version 2.1.300 or later and EF Core version 1.0 or 1.1. in this scenario you have to:
+### For apps that use EF Core 2.0 and later
 
-* Install the .NET Core SDK version 2.1.200 or earlier.
+* Install the current [.NET Core SDK](https://www.microsoft.com/net/download/core). The SDK has to be installed even if you have the latest version of Visual Studio 2017.
 
-* Configure the application to use that older version by modifying its [global.json](https://docs.microsoft.com/en-us/dotnet/core/tools/global-json) file. This file is normally included in the solution directory (one above the project). 
+* Install the latest stable `Microsoft.EntityFrameworkCore.Design` package:
 
-* Edit the project file and add `Microsoft.EntityFrameworkCore.Tools.DotNet` as a `DotNetCliToolReference` item (See below).
+  ``` Console	
+  dotnet add package Microsoft.EntityFrameworkCore.Design	
+  ```
+
+  For ASP.NET Core 2.1 apps, this package is included automatically.
+
+### For apps that use EF Core 1.0 or 1.1
+
+* If you have the .NET Core SDK version 2.1.300 or later installed, install the .NET Core SDK version 2.1.200.
+
+* Configure the application to use the 2.1.200 SDK version by modifying its [global.json](https://docs.microsoft.com/en-us/dotnet/core/tools/global-json) file. This file is normally included in the solution directory (one above the project). 
+
+* Edit the project file and add `Microsoft.EntityFrameworkCore.Tools.DotNet` as a `DotNetCliToolReference` item (see below).
 
 * Run the following commands:
 
@@ -39,7 +51,7 @@ Follow the instructions in this section if you have the .NET Core SDK version 2.
   dotnet ef
   ```
 
-With both package references, the project file looks something like this:
+With both package references added, the project file looks something like this:
 
 ``` xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -61,6 +73,8 @@ With both package references, the project file looks something like this:
 
 A package reference with `PrivateAssets="All"` means it isn't exposed to projects that reference this project. This restriction is especially useful for packages that are typically only used during development.
 
+> [!IMPORTANT]  	
+> Always use the version of the tools package that matches the major version of the runtime packages.
 
 ## Using the tools
 
