@@ -32,11 +32,11 @@ How you install the tools differs depending on whether you're using EF Core 2.x 
 
 ### For apps that use EF Core 1.0 or 1.1
 
-* If you have the .NET Core SDK version 2.1.300 or later installed, install the .NET Core SDK version 2.1.200.
+* Install the .NET Core SDK version 2.1.200. Later versions are not compatible with CLI tools for EF Core 1.0 and 1.1.
 
 * Configure the application to use the 2.1.200 SDK version by modifying its [global.json](https://docs.microsoft.com/en-us/dotnet/core/tools/global-json) file. This file is normally included in the solution directory (one above the project). 
 
-* Edit the project file and add `Microsoft.EntityFrameworkCore.Tools.DotNet` as a `DotNetCliToolReference` item (see below).
+* Edit the project file and add `Microsoft.EntityFrameworkCore.Tools.DotNet` as a `DotNetCliToolReference` item. See the project file example at the end of this section.
 
 * Run the following commands:
 
@@ -71,7 +71,7 @@ With both package references added, the project file looks something like this:
 </Project>
 ```
 
-A package reference with `PrivateAssets="All"` means it isn't exposed to projects that reference this project. This restriction is especially useful for packages that are typically only used during development.
+A package reference with `PrivateAssets="All"` isn't exposed to projects that reference this project. This restriction is especially useful for packages that are typically only used during development.
 
 > [!IMPORTANT]  	
 > Always use the version of the tools package that matches the major version of the runtime packages.
