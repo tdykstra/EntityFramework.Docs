@@ -22,15 +22,15 @@ How you install the tools differs depending on whether you're using EF Core 2.x 
 
 * Install the current [.NET Core SDK](https://www.microsoft.com/net/download/core). The SDK has to be installed even if you have the latest version of Visual Studio 2017.
 
-* Skip this step for ASP.NET Core 2.1 and later projects. For all other project types:
+  This is all that is needed for ASP.NET Core 2.1+ because the `Microsoft.EntityFrameworkCore.Design` package is included in the [Microsoft.AspNetCore.App metapackage](/aspnet/core/fundamentals/metapackage-app).
+
+* For ASP.NET Core 2.0 and earlier, or other project types:
 
   Install the latest stable `Microsoft.EntityFrameworkCore.Design` package. 
 
   ``` Console	
   dotnet add package Microsoft.EntityFrameworkCore.Design	
   ```
-
-  This install isn't needed for ASP.NET Core 2.1+ because the `Microsoft.EntityFrameworkCore.Design` package is included in the [Microsoft.AspNetCore.App metapackage](/aspnet/core/fundamentals/metapackage-app).
 
 ### For apps that use EF Core 1.0 or 1.1
 
