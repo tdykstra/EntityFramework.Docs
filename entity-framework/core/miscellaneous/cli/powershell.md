@@ -1,42 +1,52 @@
 ---
-title: Package Manager Console (Visual Studio) - EF Core
+title: EF Core tools for Package Manager Console (Visual Studio) - EF Core
 author: bricelam
 ms.author: bricelam
-ms.date: 11/6/2017
+ms.date: 09/18/2018
 ---
-EF Core Package Manager Console Tools
-=====================================
-The EF Core Package Manager Console (PMC) Tools run inside of Visual Studio using NuGet's [Package Manager Console][2].
-These tools work with both .NET Framework and .NET Core projects.
 
-> [!TIP]
-> Not using Visual Studio? The [EF Core Command-line Tools][1] are cross-platform and run inside a command prompt.
+# Entity Framework Core tools for Package Manager Console (Visual Studio)
 
-Installing the tools
---------------------
-Install the EF Core Package Manager Console Tools by installing the Microsoft.EntityFrameworkCore.Tools NuGet package.
-You can install it by executing the following command inside [Package Manager Console][2].
+The EF Core Package Manager Console (PMC) tools run inside of Visual Studio using the [Package Manager Console](https://docs.microsoft.com/nuget/tools/package-manager-console). These tools work with both .NET Framework and .NET Core projects.
+
+If you aren't using Visual Studio, we recommend the [EF Core Command-line Tools](dotnet.md) instead. The CLI tools are cross-platform and run inside a command prompt.
+
+## Installing the tools
+
+Install the EF Core Package Manager Console tools by installing the `Microsoft.EntityFrameworkCore.Tools` NuGet package. Run the following command in **Package Manager Console**.
 
 ``` powershell
 Install-Package Microsoft.EntityFrameworkCore.Tools
 ```
 
-If everything worked correctly, you should be able to run this command:
+Verify successful installation by running this command:
 
 ``` powershell
 Get-Help about_EntityFrameworkCore
 ```
-> [!TIP]
-> If your startup project targets .NET Standard, [cross-target a supported framework][3] before using the tools.
+
+## Before using the tools
+
+If your startup project targets .NET Standard, [cross-target a supported framework][3] before using the tools.
 
 > [!IMPORTANT]
 > If you're using **Universal Windows** or **Xamarin**, move your EF code to a .NET Standard class library and
 > [cross-target a supported framework][3] before using the tools. Specify the class library as your startup project.
 
-Using the tools
----------------
+## Target and startup project
+
 Whenever you invoke a command, there are two projects involved:
 
+* The *target project* is where any files are added (or in some cases removed). The target project defaults to the project in the current directory, but can be changed using the <nobr>**`--project`**</nobr> option.
+
+* The *startup project* is the one emulated by the tools when executing your project's code. It also defaults to the project in the current directory, but can be changed using the <nobr>**`--startup-project`**</nobr> option.
+
+For instance, here's a command to update the database of a web application that has EF Core installed in a different project. In this example, *WebProj* and *EFCoreProj* are projects at the same folder level. The command prompt is running in the *WebProj* folder.
+
+
+```console
+dotnet ef database update --project ./EFCoreProj
+```
 The target project is where any files are added (or in some cases removed). The target project defaults to the
 **Default project** selected in Package Manager Console, but can also be specified using the -Project parameter.
 
@@ -146,6 +156,5 @@ Parameters:
 > The Migration parameter supports tab-expansion.
 
 
-  [1]: dotnet.md
-  [2]: https://docs.microsoft.com/nuget/tools/package-manager-console
+
   [3]: index.md#frameworks
