@@ -7,11 +7,11 @@ ms.date: 09/18/2018
 
 # Entity Framework Core tools reference - Package Manager Console in Visual Studio
 
-The EF Core Package Manager Console (PMC) tools run inside of Visual Studio using the [Package Manager Console](https://docs.microsoft.com/nuget/tools/package-manager-console). These tools work with both .NET Framework and .NET Core projects.
+The Package Manager Console (PMC) tools for Entity Framework Core perform design-time development tasks. For example, they create migrations, apply migrations, and scaffold a model based on an existing database. The commands run inside of Visual Studio using the [Package Manager Console](https://docs.microsoft.com/nuget/tools/package-manager-console). These tools work with both .NET Framework and .NET Core projects.
 
 If you aren't using Visual Studio, we recommend the [EF Core Command-line Tools](dotnet.md) instead. The CLI tools are cross-platform and run inside a command prompt.
 
-## Installing or updating the tools
+## Installing the tools
 
 The procedures for installing and updating the tools differ between ASP.NET Core 2.1+ and earlier versions or other project types.
 
@@ -83,25 +83,29 @@ Before using the tools:
 
 ### Target and startup project
 
-Whenever you invoke a command, there are two projects involved:
+The commands refer to *target project* and *startup project*:
 
-* The *target project* is where any files are added (or in some cases removed). The target project defaults to the
-**Default project** selected in **Package Manager Console**. It can also be specified by using the `-Project` parameter.
+* The target project is where the EF context and entity classes reside. It's also where any files are added or removed by the commands. The target project defaults to the **Default project** selected in **Package Manager Console**. It can also be specified by using the `-Project` parameter.
 
-* The *startup project* is the one emulated by the tools when executing your project's code. The startup project defaults to the one
-set **StartUp Project** in **Solution Explorer**. It can also be specified using the `-StartupProject` parameter.
+* The *startup project* is the one that the tools build and run. The startup project defaults to the project that is designated
+**Startup Project** in **Solution Explorer**. It can be specified by using the `-StartupProject` parameter.
 
-For instance, suppose:
-* You have projects *WebProj* and *EFCoreProj* in a solution.
-* *EFCoreProj* is the default project in **Package Manager Console**.
-* In **Solution Properties** *WebProj* is the startup project.
-Since the default choices for target and startup projects are correct, you can use the `Update-Database` command without parameters.
+One project may be both target project and startup project. A typical scenario where they are separate projects is the following:
+
+* EF Core context and entity classes are in a class library.
+* A console app or web app references the class library.
+
+In this scenario, if the command prompt runs in the class library project folder, you would specify the startup project as in the following example:
+
+```console
+Add-Migration InitialCreate -StartupProject MyConsoleApplication
+```
 
 ### .NET Standard class libraries
 
-If your project targets a framework other than .NET Framework or .NET Core (for example, Universal Windows Platform or Xamarin), you have to use a .NET Standard class library for EF Core. In that case, you need to use a startup project that targets .NET Framework or .NET Core so that the tooling has a concrete target platform into which it can load your class library. This startup project can be a dummy project with no real code--it is only needed to provide a target for the tooling.
+The **Package Manager Console** tools work only with .NET Framework and .NET Core projects. If your project targets a framework other than these (for example, Universal Windows Platform or Xamarin), you have to use EF Core in a .NET Standard class library. In that case, you have to create a startup project that targets .NET Core so that the tooling has a concrete target platform into which it can load your class library. This startup project can be a dummy project with no real code &mdash; it is only needed to provide a target for the tooling.
 
-If your project targets .NET Framework or .NET Core, you don't have to use a .NET Standard class library. In that case you can use a .NET Core or .NET Framework class library, and it will be easier to work with the EF Core tools.
+For projects that target .NET Framework or .NET Core, you don't have to use a .NET Standard class library. In that case, it will be easier to work with the EF Core tools if you use a .NET Core or .NET Framework class library.
 
 ### ASP.NET Core environment
 
@@ -229,7 +233,7 @@ The following example reverts all migrations.
 Update-Database -Migration 0
 ```
 
-The following examples update the database to a specified migration:
+The following examples update the database to a specified migration. The first uses the migration name and the second uses the migration ID:
 
 ```powershell
 Update-Database -Migration InitialCreate
