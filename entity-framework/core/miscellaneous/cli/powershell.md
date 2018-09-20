@@ -214,6 +214,8 @@ Script-Migration -From 20180904195021_InitialCreate
 
 ## Update-Database
 
+Updates the database to the last migration or to a specified migration.
+
 | Parameter | Description |
 |:------------------------------------|:-----------------------------------------------------------------------------------------------|
 | <nobr>*-Migration* \<String></nobr> | The target migration. Migrations may be identified by name or by ID. The number 0 is a special case that means *before the first migration* and causes all migrations to be reverted. If no migration is specified, the command defaults to the last migration. |

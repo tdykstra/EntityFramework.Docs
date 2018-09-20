@@ -38,9 +38,9 @@ How you install the tools differs depending on whether you're using EF Core 2.x 
 
 * Configure the application to use the 2.1.200 SDK version by modifying its [global.json](https://docs.microsoft.com/en-us/dotnet/core/tools/global-json) file. This file is normally included in the solution directory (one above the project). 
 
-* Edit the project file and add `Microsoft.EntityFrameworkCore.Tools.DotNet` as a `DotNetCliToolReference` item. Specify the latest 1.x version: 1.1.6. See the project file example at the end of this section.
+* Edit the project file and add `Microsoft.EntityFrameworkCore.Tools.DotNet` as a `DotNetCliToolReference` item. Specify the latest 1.x version, for example: 1.1.6. See the project file example at the end of this section.
 
-* Install the `Microsoft.EntityFrameworkCore.Design` package, version 1.1.6:
+* Install the latest 1.x version of the `Microsoft.EntityFrameworkCore.Design` package, for example:
 
   ```console
   dotnet add package Microsoft.EntityFrameworkCore.Design -v 1.1.6
@@ -144,17 +144,24 @@ Arguments:
 |:-------------|:---------------------------------------------------------------------------------------------|
 | `<MIGRATION>` | The target migration. Migrations may be identified by name or by ID. The number 0 is a special case that means *before the first migration* and causes all migrations to be reverted. If no migration is specified, the command defaults to the last migration. |
 
+The following examples update the database to a specified migration:
+
+```powershell
+dotnet ef database update InitialCreate
+dotnet ef database update 20180904195021_InitialCreate
+```
+
 ### dotnet ef dbcontext info
 
-Gets information about a DbContext type.
+Gets information about a `DbContext` type.
 
 ### dotnet ef dbcontext list
 
-Lists available DbContext types.
+Lists available `DbContext` types.
 
 ### dotnet ef dbcontext scaffold
 
-Scaffolds a DbContext and entity types for a database.
+Scaffolds a `DbContext` and entity types for a database.
 
 Arguments:
 
@@ -175,6 +182,18 @@ Options:
 |                 | <nobr>`--schema <SCHEMA_NAME>...`</nobr> | The schemas of tables to generate entity types for. Specify multiple schemas in a space-delimited list. If this option is omitted, all schemas are included. |
 | -t              | `--table <TABLE_NAME>`...                | The tables to generate entity types for. To specify multiple tables, repeat the `-t` or `--table` for each one. If this option is omitted, all tables are included.                                                         |
 |                 | `--use-database-names`                    | Use table and column names exactly as they appear in the database. If this option is omitted, database names are changed to more closely conform to C# name style conventions. |
+
+Example:
+
+```console
+dotnet ef dbcontext scaffold "Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+```
+
+The following example scaffolds only selected tables and creates the context in a separate folder with a specified name:
+
+```console
+dotnet ef dbcontext scaffold "Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models -t Blog -t Post --context-dir Context -c BlogContext
+```
 
 ### dotnet ef migrations add
 
@@ -224,3 +243,14 @@ Options:
 | -o | `--output <FILE>` | The file to write the script to.                                   |
 | -i | `--idempotent`     | Generate a script that can be used on a database at any migration. |
 
+The following example creates a script for the InitialCreate migration:
+
+```console
+dotnet ef migrations script 0 InitialCreate
+```
+
+The following example creates a script for all migrations after the InitialCreate migration.
+
+```console
+dotnet ef migrations script 20180904195021_InitialCreate
+```
